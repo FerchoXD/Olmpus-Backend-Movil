@@ -9,7 +9,7 @@ export class BookModel extends Model {
     public edithorial!:string;
     public language!:string;
     public synopsis!:string;    
-    public userID!:string;
+    public userUUID!:string;
     public categoryUUID!:string;
     public historyUUID!:string;
 }
