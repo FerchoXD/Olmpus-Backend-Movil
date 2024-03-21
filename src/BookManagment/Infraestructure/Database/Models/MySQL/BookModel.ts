@@ -22,7 +22,7 @@ BookModel.init({
     editorial: { type: DataTypes.STRING, allowNull: false },
     language: { type: DataTypes.STRING, allowNull: false },
     synopsis: { type: DataTypes.TEXT, allowNull: false },
-    userID: { type: DataTypes.UUID, allowNull: false },
+    userUUID: { type: DataTypes.UUID, allowNull: false },
     categoryUUID: { type: DataTypes.UUID, allowNull: false },
     historyUUID: { type: DataTypes.UUID, allowNull: true }
 },{ sequelize, modelName:'book' });
