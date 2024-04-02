@@ -3,26 +3,20 @@ import { v4 as uuidv4 } from 'uuid';
 export class Book {
     public uuid:string;
     public title:string;
-    public name:string;
+    public description:string;
     public author:string;
-    public edithorial:string;
-    public language:string;
-    public synopsis:string;    
-    public userID:string|null;
-    public categoryID:string|null;
-    public historyID:string|null;
+    public image:string;
+    public content:string
+    public gender:string;
 
-    constructor(title:string, name:string, author:string, edithorial:string, language:string, synopsis:string){
+    constructor(title:string, description:string, author:string, image:string, content:string, gender:string){
         this.uuid = this.generateUuid();
         this.title = title;
-        this.name = name;
+        this.description = description;
         this.author = author;
-        this.edithorial = edithorial;
-        this.language = language;
-        this.synopsis = synopsis;
-        this.userID = null;
-        this.categoryID = null;
-        this.historyID = null;
+        this.image = image;
+        this.content = content;
+        this.gender = gender;
     }
 
     private generateUuid():string {

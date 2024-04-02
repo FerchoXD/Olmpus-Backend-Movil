@@ -1,23 +1,28 @@
 import { BookModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/BookModel";
-import { CategoryModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/CategoryModel";
 import { HistoryModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/HistoryModel";
-import { RecommendedBookModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/RecommendedBook";
+import { FavoriteModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/FavoriteModel";
 import { UserModel } from "../../../BookManagment/Infraestructure/Database/Models/MySQL/UserModel";
 
-// Relación uno a muchos: UserModel a BookModel
-UserModel.hasMany(BookModel, { foreignKey: 'userUUID' });
+// Relación uno a muchos: UserModel a HistoryModel
+UserModel.hasMany(HistoryModel, { foreignKey: 'userUUID' });
 
-// Relación muchos a uno: BookModel a UserModel
-BookModel.belongsTo(UserModel, { foreignKey: 'userUUID' });
+// Relación uno a muchos: UserModel a FavoriteModel
+UserModel.hasMany(FavoriteModel, { foreignKey: 'userUUID' });
 
-// Relación uno a muchos: CategoryModel a BookModel
-CategoryModel.hasMany(BookModel, { foreignKey: 'categoryUUID' });
+// Relación uno a muchos: BookModel a HistoryModel
+BookModel.hasMany(HistoryModel, { foreignKey: 'bookUUID' });
 
-// Relación muchos a uno: BookModel a CategoryModel
-BookModel.belongsTo(CategoryModel, { foreignKey: 'categoryUUID' });
+// Relación uno a muchos: BookModel a FavoriteModel
+BookModel.hasMany(FavoriteModel, { foreignKey: 'bookUUID' });
 
-// Relación uno a uno: HistoryModel a BookModel
-HistoryModel.hasOne(BookModel, { foreignKey: 'historyUUID' });
+// Relación muchos a uno: HistoryModel a UserModel
+HistoryModel.belongsTo(UserModel, { foreignKey: 'userUUID' });
 
-// Relación uno a uno: RecommendedBookModel a BookModel
-RecommendedBookModel.hasOne(BookModel, { foreignKey: 'recommendedBookId' });
+// Relación muchos a uno: HistoryModel a BookModel
+HistoryModel.belongsTo(BookModel, { foreignKey: 'bookUUID' });
+
+// Relación muchos a uno: FavoriteModel a UserModel
+FavoriteModel.belongsTo(UserModel, { foreignKey: 'userUUID' });
+
+// Relación muchos a uno: FavoriteModel a BookModel
+FavoriteModel.belongsTo(BookModel, { foreignKey: 'bookUUID' });
