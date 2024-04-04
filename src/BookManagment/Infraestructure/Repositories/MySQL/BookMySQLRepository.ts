@@ -26,6 +26,7 @@ export class BookMySQLRepository implements IBook {
             const books:Book[] = [];
             result.forEach((book:any) => {
                 const bookEntity = new Book(book.title, '', book.author, book.image, '', '');
+                bookEntity.uuid = book.uuid
                 books.push(bookEntity);
             });
             return {
