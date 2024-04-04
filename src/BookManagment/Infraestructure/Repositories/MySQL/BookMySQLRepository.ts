@@ -6,16 +6,17 @@ import { IBook } from "../../../Domain/Ports/IBook";
 export class BookMySQLRepository implements IBook {
     async recommendBook(userUUID: string): Promise<Book[]|any> {
         try {
-            const query = `SELECT books.author FROM histories
+            const query = `SELECT books.gender FROM histories
             INNER JOIN books ON histories.bookUUID = books.uuid AND histories.userUUID = '${userUUID}'
             ORDER BY histories.createdAt DESC LIMIT 1;`;
 
             const data = await sequelize.query(query, { type: Sequelize.QueryTypes.SELECT } );
+            console.log(data);
             let result;
             if(data.length < 1){
-                result = await sequelize.query("SELECT uuid, title, author, image FROM books ORDER BY RAND() LIMIT 10;", { type:  Sequelize.QueryTypes.SELECT });
+                result = await sequelize.query("SELECT uuid, title, description, author, image, content FROM books ORDER BY RAND() LIMIT 10;", { type:  Sequelize.QueryTypes.SELECT });
             }else{
-                result = await sequelize.query(`SELECT uuid, title, author, image FROM books WHERE author = '${(data[0] as any).author}';`, { type: Sequelize.QueryTypes.SELECT });
+                result = await sequelize.query(`SELECT uuid, title, description, author, image, content FROM books WHERE gender = '${(data[0] as any).gender}';`, { type: Sequelize.QueryTypes.SELECT });
                 if(result.length === 0){
                     return {
                         "status": 404,
@@ -25,7 +26,7 @@ export class BookMySQLRepository implements IBook {
             }
             const books:Book[] = [];
             result.forEach((book:any) => {
-                const bookEntity = new Book(book.title, '', book.author, book.image, '', '');
+                const bookEntity = new Book(book.title, book.description, book.author, book.image, book.content, book.gender);
                 bookEntity.uuid = book.uuid
                 books.push(bookEntity);
             });
