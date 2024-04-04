@@ -11,15 +11,16 @@ export class BookMySQLRepository implements IBook {
             ORDER BY histories.createdAt DESC LIMIT 1;`;
 
             const data = await sequelize.query(query, { type: Sequelize.QueryTypes.SELECT } );
-            if(data.length === 0){
-                console.log("No tiene ni pija");
-            }
-
-            const result = await sequelize.query(`SELECT uuid, title, author, image FROM books WHERE author = '${(data[0] as any).author}';`, { type: Sequelize.QueryTypes.SELECT });
-            if(result.length === 0){
-                return {
-                    "status": 404,
-                    "error": "No hay libros en la base de datos"
+            let result;
+            if(data.length < 1){
+                result = await sequelize.query("SELECT uuid, title, author, image FROM books ORDER BY RAND() LIMIT 10;", { type:  Sequelize.QueryTypes.SELECT });
+            }else{
+                result = await sequelize.query(`SELECT uuid, title, author, image FROM books WHERE author = '${(data[0] as any).author}';`, { type: Sequelize.QueryTypes.SELECT });
+                if(result.length === 0){
+                    return {
+                        "status": 404,
+                        "error": "No hay libros en la base de datos"
+                    }
                 }
             }
             const books:Book[] = [];
