@@ -89,7 +89,38 @@ export class BookMySQLRepository implements IBook {
     }
 
     async serchBook(name: string): Promise<Book[]|any> {
-        throw new Error("Method not implemented.");
+        try {
+            name = name.replace(/-/g, ' ');
+            const books = await BookModel.findAll({ where: { title: name }, attributes: ['uuid', 'image', 'author', 'title', 'description', 'content', 'gender'] });
+            if(books.length === 0){
+                return {
+                    "status": 404,
+                    "errors": [
+                        {
+                            "title": "Book Not Found",
+                            "detail": `The book with the title "${name}" was not found.`                        }
+                    ]
+                }
+            }
+            const booksEntity:Book[] = [];
+            books.forEach((book:any) => {
+                book = book.dataValues;
+                const bookEntity = new Book(book.title, book.description, book.author, book.image, book.content, book.gender);
+                booksEntity.push(bookEntity)
+            });
+
+            return {
+                "status": 200,
+                "type": "books",
+                "data": booksEntity
+            }
+
+        } catch (error) {
+            return {
+                "status":500,
+                "error": error
+            }
+        }
     }
     
 
