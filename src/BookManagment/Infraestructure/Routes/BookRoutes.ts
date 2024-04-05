@@ -13,6 +13,6 @@ BookRouter.get('/:bookUUID/preview', getBookPreviewController.run.bind(getBookPr
 BookRouter.get('/search/:name', getBooksByNameController.run.bind(getBooksByNameController));
 
 // Obtener libros
-BookRouter.get('/books', getBooksController.run.bind(getBooksController));
+BookRouter.get('/', getBooksController.run.bind(getBooksController));
 
 export default BookRouter;
