@@ -1,23 +1,77 @@
 import { User } from "../../../Domain/Entities/User";
 import { IUser } from "../../../Domain/Ports/IUser";
+import { UserModel } from "../../Database/Models/MySQL/UserModel";
+import bcrypt from "bcrypt";
+import { JWTService } from "../../../Application/JWT/JWTService";
 
 export class UserMySQLRepository implements IUser {
+    
     async login(email: string, password: string): Promise<User|any> {
-        throw new Error("Method not implemented.");
+        try {
+
+            let user = await UserModel.findOne({ where: { email: email } });
+    
+            if (!user) {
+                return {
+                    status: 404,
+                    message: 'Usuario no encontrado.'
+                };
+            }
+
+            const passwordIsValid = bcrypt.compareSync(password, user.password);
+
+            if (!passwordIsValid) {
+                return {
+                    status: 401,
+                    message: 'Contraseña incorrecta.'
+                };
+            }
+
+            const token = JWTService.generateToken(user.uuid, user.email);
+
+            return {
+                status: 200,
+                message: 'Inicio de sesión exitoso.',
+                token: token
+            };
+
+        } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+            return {
+                status: 500,
+                message: "Error al iniciar sesión",
+                error: error
+            };
+        }
     }
 
     async register(email: string, password: string): Promise<User | any> {
         try {
-            // Insertar el nuevo usuario en la base de datos
-            const query = 'INSERT INTO users (uuid, email, password) VALUES (?, ?, ?)';
-            await this.query(query, [ email, password]);
+            const user = new User (email, password)
 
-            // Devolver el usuario registrado
-            return new User(email, password);
+            user.password= await bcrypt.hash(password,10)
+
+            const userResponse = await UserModel.create({ 
+                uuid: user.uuid,
+                email: user.email,
+                password: user.password
+            })
+
+            return {
+                "status": 201,
+                "uuid": userResponse.dataValues.uuid,
+                "type": "users",
+                "attributes": {
+                    "email": userResponse.dataValues.email,
+                    "password": userResponse.dataValues.password
+                }
+            }
+
+            
         } catch (error) {
             console.error("Error al registrar usuario:", error);
             return {
-                success: false,
+                status: 500,
                 message: "Error al registrar usuario",
                 error: error
             };
@@ -26,82 +80,11 @@ export class UserMySQLRepository implements IUser {
 
 
     async getUser(uuid: string): Promise<User | any> {
-        try {
-            // Consultar el usuario en la base de datos por su UUID
-            const query = 'SELECT * FROM users WHERE uuid = ?';
-            const [rows] = await this.query(query, [uuid]);
-
-            // Verificar si se encontró un usuario
-            if (rows.length === 0) {
-                return {
-                    success: false,
-                    message: "Usuario no encontrado"
-                };
-            }
-
-            // Obtener los datos del usuario de la fila de resultados y devolverlo
-            const userData = rows[0];
-            const user = new User(userData.email, userData.password);
-            return user;
-        } catch (error) {
-            console.error("Error al obtener usuario:", error);
-            return {
-                success: false,
-                message: "Error al obtener usuario",
-                error: error
-            };
-        }
+        
     }
-    query(query: string, arg1: string[]): [any] | PromiseLike<[any]> {
-        throw new Error("Method not implemented.");
-    }
-
+    
     async updateUser(uuid: string, name: string | null, lastname: string | null, username: string | null, interests: string | null): Promise<User | any> {
-        try {
-            // Construir la consulta SQL para actualizar los datos del usuario
-            let query = 'UPDATE users SET ';
-            const values = [];
-
-            // Verificar y agregar cada campo que se va a actualizar
-            if (name !== null) {
-                query += 'name = ?, ';
-                values.push(name);
-            }
-            if (lastname !== null) {
-                query += 'lastname = ?, ';
-                values.push(lastname);
-            }
-            if (username !== null) {
-                query += 'username = ?, ';
-                values.push(username);
-            }
-            if (interests !== null) {
-                query += 'interests = ?, ';
-                values.push(interests);
-            }
-
-            //conexion para el query
-            await this.query(query, values);
-            // Eliminar la última coma y espacio en la consulta
-            query = query.slice(0, -2);
-
-            // Agregar la condición WHERE para actualizar el usuario específico
-            query += ' WHERE uuid = ?';
-            values.push(uuid);
-
-            // Devolver un mensaje de éxito
-            return {
-                success: true,
-                message: "Usuario actualizado correctamente"
-            };
-        } catch (error) {
-            console.error("Error al actualizar usuario:", error);
-            return {
-                success: false,
-                message: "Error al actualizar usuario",
-                error: error
-            };
-        }
+        
     }
 
 }
