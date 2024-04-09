@@ -80,11 +80,42 @@ export class UserMySQLRepository implements IUser {
 
 
     async getUser(uuid: string): Promise<User | any> {
-        
+        try {
+            
+            const user = await UserModel.findByPk(uuid)
+
+            if (!user) {
+                return {
+                    status: 404,
+                    message: 'Usuario no encontrado.'
+                };
+            }
+
+            return {
+                "status": 201,
+                "uuid": user.dataValues.uuid,
+                "type": "users",
+                "attributes": {
+                    "name": user.dataValues.name,
+                    "lastname": user.dataValues.lastname,
+                    "username": user.dataValues.username,
+                    "email": user.dataValues.email,
+                    "interests": user.dataValues.interests
+                }
+            }
+
+        } catch (error) {
+            console.error("Error el usuario no existe:", error);
+            return {
+                status: 500,
+                message: "Error el usuario no existe",
+                error: error
+            }; 
+        }
     }
     
     async updateUser(uuid: string, name: string | null, lastname: string | null, username: string | null, interests: string | null): Promise<User | any> {
-        
+        //pacht, utilizando los modelos 
     }
 
 }
