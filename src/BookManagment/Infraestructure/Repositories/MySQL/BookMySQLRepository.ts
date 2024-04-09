@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import sequelize from "../../../../Database/Config/MySQL/Database";
 import Sequelize from "sequelize";
 import { Book } from "../../../Domain/Entities/Book";
