@@ -32,7 +32,8 @@ export class UserMySQLRepository implements IUser {
             return {
                 status: 200,
                 message: 'Inicio de sesión exitoso.',
-                token: token
+                token: token,
+                uuid: user.dataValues.uuid
             };
 
         } catch (error) {
