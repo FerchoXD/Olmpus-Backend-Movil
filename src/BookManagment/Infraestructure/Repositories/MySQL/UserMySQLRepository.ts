@@ -115,7 +115,37 @@ export class UserMySQLRepository implements IUser {
     }
     
     async updateUser(uuid: string, name: string | null, lastname: string | null, username: string | null, interests: string | null): Promise<User | any> {
-        //pacht, utilizando los modelos 
+        try {
+        
+            const existingUser = await UserModel.findByPk(uuid);
+            
+            if (!existingUser) {
+                return {
+                    status: 404,
+                    message: 'Usuario no encontrado.'
+                };
+            }
+    
+            const updatedFields: any = {};
+            if (name !== null) updatedFields.name = name;
+            if (lastname !== null) updatedFields.lastname = lastname;
+            if (username !== null) updatedFields.username = username;
+            if (interests !== null) updatedFields.interests = interests;
+    
+            await existingUser.update(updatedFields);
+    
+            return {
+                status: 200,
+                message: 'Usuario actualizado exitosamente.'
+            };
+        } catch (error) {
+            console.error("Error al actualizar usuario:", error);
+            return {
+                status: 500,
+                message: "Error al actualizar usuario",
+                error: error
+            };
+        }
     }
 
 }
