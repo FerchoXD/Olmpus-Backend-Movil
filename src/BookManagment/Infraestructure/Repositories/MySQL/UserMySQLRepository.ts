@@ -93,7 +93,7 @@ export class UserMySQLRepository implements IUser {
             }
 
             return {
-                "status": 201,
+                "status": 200,
                 "uuid": user.dataValues.uuid,
                 "type": "users",
                 "attributes": {
