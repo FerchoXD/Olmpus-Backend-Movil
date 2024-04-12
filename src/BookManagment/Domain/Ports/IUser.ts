@@ -5,4 +5,5 @@ export interface IUser {
     register(email:string, password:string):Promise<User|any>;
     getUser(uuid:string):Promise<User|any>;
     updateUser(uuid:string, name:string|null, lastname:string|null, username:string|null, interests:string|null):Promise<User|any>;
+    deleteUserByUUID(uuid:string):Promise<any>;
 }
