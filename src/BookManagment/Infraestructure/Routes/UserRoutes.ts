@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getBooksFavoritesController, getBooksInHistoryController, getUserController, loginController, readBookController, registerUserController, saveBookInHistoryController, updateUserController } from "../Dependencies";
+import { deleteUserByUUIDController, getBooksFavoritesController, getBooksInHistoryController, getUserController, loginController, readBookController, registerUserController, saveBookInHistoryController, updateUserController } from "../Dependencies";
 
 const UserRoutes = Router();
 
@@ -26,5 +26,8 @@ UserRoutes.post('/:userUUID/favorites/books/:bookUUID', saveBookInHistoryControl
 
 // Obtener el historial de libros de un usuario especifico
 UserRoutes.get('/:userUUID/history/books', getBooksInHistoryController.run.bind(getBooksInHistoryController));
+
+// Eliminar un usuario por uuid
+UserRoutes.delete('/delete/:userUUID', deleteUserByUUIDController.run.bind(deleteUserByUUIDController));
 
 export default UserRoutes;
