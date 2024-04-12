@@ -1,5 +1,6 @@
 import { DatabaseConfig } from "../../Database/Config/IDatabaseConfig";
 import { MySQLConfig } from "../../Database/Config/MySQL/MySQLConfig";
+import { DeleteUserByUUIDUseCase } from "../Application/UseCase/DeleteUserByUUIDUseCase";
 import { GetBookPreviewUseCase } from "../Application/UseCase/GetBookPreviewUseCase";
 import { GetBooksByNameUseCase } from "../Application/UseCase/GetBooksByNameUseCase";
 import { GetBooksFavoriteUseCase } from "../Application/UseCase/GetBooksFavoritesUseCase";
@@ -12,6 +13,7 @@ import { RecommendBookUseCase } from "../Application/UseCase/RecommendBooksUseCa
 import { RegisterUserUseCase } from "../Application/UseCase/RegisterUserUseCase";
 import { SaveBookInHistoryUseCase } from "../Application/UseCase/SaveBookInHistoryUseCase";
 import { UpdateUserUseCase } from "../Application/UseCase/UpdateUserUseCase";
+import { DeleteUserByUUIDController } from "./Controllers/DeleteUserByUUIDController";
 import { GetBookPreviewController } from "./Controllers/GetBookPreviewController";
 import { GetBooksByNameController } from "./Controllers/GetBooksByNameController";
 import { GetBooksController } from "./Controllers/GetBooksController";
@@ -64,6 +66,7 @@ const loginUseCase = new LoginUseCase(userRepository);
 const registerUserUseCase = new RegisterUserUseCase(userRepository);
 const getUserUseCase = new GetUserUseCase(userRepository);
 const updateUserUseCase = new UpdateUserUseCase(userRepository);
+const deleteUserByUUIDUseCase = new DeleteUserByUUIDUseCase(userRepository);
 
 export const getBookPreviewController = new GetBookPreviewController(getBookPreviewUseCase);
 export const getBooksByNameController = new GetBooksByNameController(getBooksByNameUseCase);
@@ -80,3 +83,4 @@ export const loginController = new LoginController(loginUseCase);
 export const registerUserController = new RegisterUserController(registerUserUseCase);
 export const getUserController = new GetUserController(getUserUseCase);
 export const updateUserController = new UpdateUserController(updateUserUseCase);
+export const deleteUserByUUIDController = new DeleteUserByUUIDController(deleteUserByUUIDUseCase);
