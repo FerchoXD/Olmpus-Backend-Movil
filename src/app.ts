@@ -2,11 +2,13 @@ import express from "express";
 import "dotenv/config";
 import BookRouter from "./BookManagment/Infraestructure/Routes/BookRoutes";
 import UserRoutes from "./BookManagment/Infraestructure/Routes/UserRoutes";
+import cors from "cors";
 import { jwtMiddleware } from "./BookManagment/Infraestructure/middlewares/JWTMiddleware";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.use((req, res, next) => {
     if (req.path === '/api/v1/users/register' || req.path === '/api/v1/users/login') {

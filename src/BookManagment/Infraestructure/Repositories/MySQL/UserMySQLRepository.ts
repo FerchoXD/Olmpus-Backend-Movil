@@ -32,7 +32,8 @@ export class UserMySQLRepository implements IUser {
             return {
                 status: 200,
                 message: 'Inicio de sesión exitoso.',
-                token: token
+                token: token,
+                uuid: user.dataValues.uuid
             };
 
         } catch (error) {
@@ -92,7 +93,7 @@ export class UserMySQLRepository implements IUser {
             }
 
             return {
-                "status": 201,
+                "status": 200,
                 "uuid": user.dataValues.uuid,
                 "type": "users",
                 "attributes": {
@@ -148,6 +149,7 @@ export class UserMySQLRepository implements IUser {
         }
     }
 
+
     async deleteUserByUUID(uuid: string): Promise<any> {
         try {
             const user = await UserModel.destroy({ where: { uuid:uuid } });
@@ -166,5 +168,5 @@ export class UserMySQLRepository implements IUser {
             };
         }
     }
-
+  
 }
