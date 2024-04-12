@@ -148,4 +148,23 @@ export class UserMySQLRepository implements IUser {
         }
     }
 
+    async deleteUserByUUID(uuid: string): Promise<any> {
+        try {
+            const user = await UserModel.destroy({ where: { uuid:uuid } });
+
+            if(user == 0) return { status: 404, message: 'Usuario No Encontrado.' }
+
+            return {
+                status: 200,
+                message: 'Usuario Eliminado Correctamente.'
+            }
+        } catch (error) {
+            return {
+                status: 500,
+                message: "Error al eliminar usuario",
+                error: error
+            };
+        }
+    }
+
 }
